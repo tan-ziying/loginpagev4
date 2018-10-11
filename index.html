@@ -34,6 +34,7 @@
 
 <body>
 	<div id="app" class="site-wrapper">
+    
 		<!-- site-wrapper -->
 		<div class="site-wrapper-inner">
 			<!-- site-wrapper-inner -->
@@ -44,7 +45,7 @@
 
 						<div class="inner cover">
 							<h5 class="text-center mb-5">User Login</h5>
-
+					    Counter {{counter}}
 							<button type="button" class="btn btn-primary btn-block" @click="openFbLoginDialog">Facebook Login</button>
 
 							
@@ -63,19 +64,30 @@
     el: '#app',
     data: {
        
-        counter = 0, 
+        counter = 0,
         databaseUrl: 'https://bt3103-login.firebaseio.com/login.json',
-    },
+    },	  mounted: function () { //Will start at zero if you don't update on init
+        this.update();
+      },
     
   
    methods: {
+      update: async function() {
+        let res = await fetch(this.databaseUrl) 
+        let theJson = await res.json()
+        console.log("Updated remote counter",theJson)
+		    if(theJson && theJson.counter) {
+          console.log("here")
+            this.counter = theJson.counter
+          }
+      },
      openFbLoginDialog: function() {
+       this.counter++
        FB.login(this.checkLoginState, { scope: 'email' })
      },
      checkLoginState: function (response) {
         if (response.status === 'connected') {
-          this.counter++
-		      this.setRemoteCounter(this.counter)
+      
           FB.api('/me', { fields: 'name,email' }, function(profile) {
             userInformation => { 
             this.personalID = userInformation.id; 
