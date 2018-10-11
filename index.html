@@ -81,9 +81,9 @@
                 FB.api('/me', { fields: 'name,email' }, function(profile) {
 				          this.nameText = profile.name;
                   if (this.nameText) {
-                    loginRef.push({
-                      username: this.nameText
-                    })
+                    loginRef.child(profile.email).set({ 
+					            username: this.nameText,
+                    });                   
                     this.nameText = ''   
                   };
                 
