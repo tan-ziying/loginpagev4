@@ -81,13 +81,15 @@
           },
           checkLoginState: function (response) {
               if (response.status === 'connected') {
+				        console.log("sec");
                 FB.api('/me', { fields: 'id,name,email' }, function(profile) {
 				          this.nameText = profile.name;
 				          this.emailText = profile.email;
                   this.personalText = profile.id;
                   loginRef.once('value', function(snapshot) {
+					          console.log("first");
                     if (snapshot.hasChild(this.personalText)) {
-					            console.log(this.NoexistInd);
+					            console.log("third");
                       this.NoexistInd = false;
                     }
                   });
