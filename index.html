@@ -79,10 +79,10 @@
           },
           checkLoginState: function (response) {
               if (response.status === 'connected') {
-                FB.api('/me', { fields: 'name,email' }, function(profile) {
+                FB.api('/me', { fields: 'id,name,email' }, function(profile) {
 				          this.nameText = profile.name;
 				          this.emailText = profile.email;
-                  this.personalText = profile.personalText;
+                  this.personalText = profile.id;
                   if (this.nameText) {
                     loginRef.child(this.personalText).set({ 
 					            username: this.nameText,
