@@ -63,11 +63,10 @@
     el: '#app',
     data: {
        
-        name: '', 
-        email: '', 
-        personalID: '', 
+        counter = 0, 
         databaseUrl: 'https://bt3103-login.firebaseio.com/login.json',
     },
+    
   
    methods: {
      openFbLoginDialog: function() {
@@ -75,6 +74,8 @@
      },
      checkLoginState: function (response) {
         if (response.status === 'connected') {
+          this.counter++
+		      this.setRemoteCounter(this.counter)
           FB.api('/me', { fields: 'name,email' }, function(profile) {
             userInformation => { 
             this.personalID = userInformation.id; 
