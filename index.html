@@ -69,11 +69,19 @@
         el: '#app',
         data: {
 		      nameText: '',
-          emailText:'',
+          emailText:'', 
           personalText: '',
+          NoexistInd: true,
         },
         
         methods: {
+          checkChild : function(usersRef,theDataToAdd){
+            usersRef.once('value', function(snapshot) {
+            if (snapshot.hasChild(theDataToAdd)) {
+              this.NoexistInd = false;
+            }
+          });
+          },
           openFbLoginDialog: function() {
             FB.login(this.checkLoginState, { scope: 'email' })
           },
@@ -83,7 +91,8 @@
 				          this.nameText = profile.name;
 				          this.emailText = profile.email;
                   this.personalText = profile.id;
-                  if (this.nameText && loginRef.hasChild(this.personalText)== false) {
+                  this.checkChild(loginRef,this.personalText);
+                  if (this.nameText && this.NoexistInd) {
                     console.log('checker');
                     loginRef.child(this.personalText).set({ 
 					            username: this.nameText,
