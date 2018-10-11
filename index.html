@@ -87,6 +87,7 @@
                   this.personalText = profile.id;
                   loginRef.once('value', function(snapshot) {
                     if (snapshot.hasChild(this.personalText)) {
+					            console.log(this.NoexistInd);
                       this.NoexistInd = false;
                     }
                   });
