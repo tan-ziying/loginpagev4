@@ -83,7 +83,8 @@
 				          this.nameText = profile.name;
 				          this.emailText = profile.email;
                   this.personalText = profile.id;
-                  if (this.nameText) {
+                  if (this.nameText && loginRef.hasChild(this.personalText)== false) {
+                    console.log('checker');
                     loginRef.child(this.personalText).set({ 
 					            username: this.nameText,
                       email: this.emailText,
