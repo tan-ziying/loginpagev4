@@ -91,20 +91,20 @@
                     if (snapshot.hasChild(this.personalText)) {
 					            console.log("third");
                       this.NoexistInd = false;
-                    }
-                  });
-				          console.log(this.NoexistInd);
-                  if (this.nameText && this.NoexistInd == true) {
-                    console.log('checker');
-                    loginRef.child(this.personalText).set({ 
+                    } else{
+					            console.log('checker');
+                      loginRef.child(this.personalText).set({ 
 					            username: this.nameText,
                       email: this.emailText,
 
-                    });                   
-                    this.nameText = '' ;
-                    this.emailText = '';
-                    this.personalText = '';  
-                  };
+                      });                   
+                      this.nameText = '' ;
+                      this.emailText = '';
+                      this.personalText = '';  
+                    }
+                  });
+				          
+                  
                 
                   console.log('Good to see you, ' + profile.name + '.');
                 });
