@@ -12,6 +12,8 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js">
 	</script>
 	<script src="https://unpkg.com/vue"></script>
+	<script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+	<script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
 	<script>
 		window.fbAsyncInit = function() {
       FB.init({
@@ -44,8 +46,8 @@
 
 						<div class="inner cover">
 							<h5 class="text-center mb-5">User Login</h5>
-
-							<button type="button" class="btn btn-primary btn-block" @click="openFbLoginDialog">Facebook Login</button>
+			        <button class="btn btn-primary btn-block" v-on:click="openFbLoginDialog()">Facebook Login</button>
+							
 
 							
 						</div>
@@ -57,42 +59,49 @@
 		<!-- site-wrapper-inner -->
 	</div>
 	<!-- site-wrapper -->
-
-	<script>
-		var app = new Vue({
-    el: '#app',
-    data: {
-       
-        name: '', 
-        email: '', 
-        personalID: '', 
-        databaseUrl: 'https://bt3103-login.firebaseio.com/login.json',
-    },
-  
-   methods: {
-     openFbLoginDialog: function() {
-       FB.login(this.checkLoginState, { scope: 'email' })
-     },
-     checkLoginState: function (response) {
-        if (response.status === 'connected') {
-          FB.api('/me', { fields: 'name,email' }, function(profile) {
-            userInformation => { 
-            this.personalID = userInformation.id; 
-            this.email = userInformation.email; 
-            this.name = userInformation.name; 
-            }
-            console.log('Good to see you, ' + profile.name + '.');
-          });
-       } else if (response.status === 'not_authorized') {
+  <script>
+    var db = firebase.initializeApp({
+        databaseURL: 'https://bt3103-login.firebaseio.com/'
+      }).database()
+      var loginRef = db.ref('login')
+      
+      new Vue({
+        el: '#app',
+        data: {
+		      nameText: '',
+          
+        },
+        
+        methods: {
+          openFbLoginDialog: function() {
+            FB.login(this.checkLoginState, { scope: 'email' })
+          },
+          checkLoginState: function (response) {
+              if (response.status === 'connected') {
+                FB.api('/me', { fields: 'name,email' }, function(profile) {
+				          this.nameText = profile.name;
+                  if (this.nameText) {
+                    loginRef.push({
+                      username: this.nameText
+                    })
+                    this.nameText = ''   
+                  };
+                
+                  console.log('Good to see you, ' + profile.name + '.');
+                });
+              } else if (response.status === 'not_authorized') {
         // the user is logged in to Facebook, 
           // but has not authenticated your app
-        } else {
+         } else {
           // the user isn't logged in to Facebook.
+          }
+        },
         }
-      },
-   }
-  });
-	</script>
-</body>
+    })
+
+  </script>
+
+	
+  </body>
 
 </html>
