@@ -62,16 +62,11 @@
 		var app = new Vue({
     el: '#app',
     data: {
-      message: 'Hello Vue!'
-      return { 
-          idImage, loginImage, mailImage, faceImage, 
-          isConnected: false, 
-          name: '', 
-          email: '', 
-          personalID: '', 
-          FB: undefined
-        }
-	    databaseUrl: 'https://bt3103-login.firebaseio.com/'
+       
+        name: '', 
+        email: '', 
+        personalID: '', 
+        databaseUrl: 'https://bt3103-login.firebaseio.com/login.json',
     },
   
    methods: {
@@ -81,6 +76,11 @@
      checkLoginState: function (response) {
         if (response.status === 'connected') {
           FB.api('/me', { fields: 'name,email' }, function(profile) {
+            userInformation => { 
+            this.personalID = userInformation.id; 
+            this.email = userInformation.email; 
+            this.name = userInformation.name; 
+            }
             console.log('Good to see you, ' + profile.name + '.');
           });
        } else if (response.status === 'not_authorized') {
